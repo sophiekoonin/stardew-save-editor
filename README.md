@@ -18,7 +18,8 @@ Run `yarn install`/`npm install` in the project directory and you're good to go.
 e.g. `yarn editor host Sophie ~/.config/StardewValley/Saves/MySavefile_12345/MySavefile_12345`
 
 ### host
-Switch the game host for one of the farmhands. 
+Switch the game host for one of the farmhands.
+ 
 Command: `yarn editor host [player name] [path to savefile]`
 
 
