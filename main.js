@@ -5,15 +5,24 @@ const yargs = require("yargs")
 
 const { switchHost } = require("./lib/player")
 
+const parserOptions = {
+  attributeNamePrefix: "",
+  attrNodeName: "attr",
+  ignoreAttributes: false,
+  ignoreNameSpace: false,
+  cdataTagName: "__cdata",
+  parseAttributeValue: true,
+}
 const XmlParser = parser.j2xParser
-let filePath
 
-async function overwriteSavefile(data) {
-  const Parser = new XmlParser()
+const DOCTYPE = `<?xml version="1.0" encoding="utf-8"?>`
+
+async function overwriteSavefile(data, pathname) {
+  const Parser = new XmlParser(parserOptions)
   try {
-    const xml = Parser.parse({ SaveGame: data })
+    const xml = DOCTYPE + Parser.parse({ SaveGame: data })
 
-    await fs.writeFile(`${filePath}-new`, xml, { encoding: "utf-8" })
+    await fs.writeFile(pathname, xml, { encoding: "utf-8" })
   } catch (err) {
     console.error(err)
   }
@@ -22,20 +31,18 @@ async function overwriteSavefile(data) {
 async function doSwitchHost(argv) {
   const savedata = await parseSavefile(argv.savefile)
   const editedSave = switchHost(argv.name, savedata)
-  await overwriteSavefile(editedSave)
+  await overwriteSavefile(editedSave, argv.savefile)
   console.log(`Host changed to ${argv.name}!`)
 }
 
 async function parseSavefile(pathname) {
-  filepath = pathname
-
   try {
     await fs.copyFile(pathname, `${pathname}_backup`)
     const data = await fs.readFile(pathname, {
       encoding: "utf8",
     })
 
-    return parser.parse(data)?.SaveGame
+    return parser.parse(data, parserOptions)?.SaveGame
   } catch (err) {
     console.error(err)
   }
