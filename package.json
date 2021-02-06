@@ -7,6 +7,13 @@
   "author": "Sophie Koonin",
   "license": "MIT",
   "dependencies": {
-    "htmlparser2": "6.0.0"
+    "fast-xml-parser": "3.18.0",
+    "yargs": "16.2.0"
+  },
+  "devDependencies": {
+    "prettier": "2.2.1"
+  },
+  "prettier": {
+    "semi": false
   }
 }
