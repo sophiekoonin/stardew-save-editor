@@ -1,0 +1,12 @@
+{
+  "name": "stardew-save-editor",
+  "version": "0.0.1",
+  "description": "A save editor for Stardew Valley games",
+  "main": "main.js",
+  "repository": "https://github.com/sophiekoonin/stardew-save-editor",
+  "author": "Sophie Koonin",
+  "license": "MIT",
+  "dependencies": {
+    "htmlparser2": "6.0.0"
+  }
+}
