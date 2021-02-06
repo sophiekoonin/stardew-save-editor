@@ -1,16 +1,16 @@
-const fs = require("fs/promises")
-const parser = require("fast-xml-parser")
-const path = require("path")
-const yargs = require("yargs")
+const fs = require('fs/promises')
+const parser = require('fast-xml-parser')
+const path = require('path')
+const yargs = require('yargs')
 
-const { switchHost } = require("./lib/player")
+const { switchHost } = require('./lib/player')
 
 const parserOptions = {
-  attributeNamePrefix: "",
-  attrNodeName: "attr",
+  attributeNamePrefix: '',
+  attrNodeName: 'attr',
   ignoreAttributes: false,
   ignoreNameSpace: false,
-  cdataTagName: "__cdata",
+  cdataTagName: '__cdata',
   parseAttributeValue: true,
 }
 const XmlParser = parser.j2xParser
@@ -22,14 +22,14 @@ async function overwriteSavefile(data, pathname) {
   try {
     const xml = DOCTYPE + Parser.parse({ SaveGame: data })
 
-    await fs.writeFile(pathname, xml, { encoding: "utf-8" })
+    await fs.writeFile(pathname, xml, { encoding: 'utf-8' })
   } catch (err) {
     console.error(err)
   }
 }
 
 async function doSwitchHost(argv) {
-  const savedata = await parseSavefile(argv.savefile)
+  const savedata = await parseSavefile(argv.pathToSavefile)
   const editedSave = switchHost(argv.name, savedata)
   await overwriteSavefile(editedSave, argv.savefile)
   console.log(`Host changed to ${argv.name}!`)
@@ -39,7 +39,7 @@ async function parseSavefile(pathname) {
   try {
     await fs.copyFile(pathname, `${pathname}_backup`)
     const data = await fs.readFile(pathname, {
-      encoding: "utf8",
+      encoding: 'utf8',
     })
 
     return parser.parse(data, parserOptions)?.SaveGame
@@ -49,13 +49,14 @@ async function parseSavefile(pathname) {
 }
 
 yargs
+  .version('0.0.1')
   .command(
-    "host [name] [savefile]",
-    "Make someone the host",
+    'host [name] [pathToSavefile]',
+    'Make someone the host',
     (yargs) => {
-      yargs.positional("savefile", {
-        type: "string",
-        describe: "The pathname of your savefile",
+      yargs.positional('pathToSavefile', {
+        type: 'string',
+        describe: 'The pathname of your savefile',
       })
     },
     async function (argv) {
